@@ -21,6 +21,7 @@ class Crawler:
 
         for result in soup.select('a[class=WlydOe]'):
             content = result.find('div', attrs={'class': 'iRPxbe'})
+            contentOwner = result.find('span').text
             obj = {}
 
             try:
@@ -28,8 +29,9 @@ class Crawler:
                 obj["title"] = content.find_all('div')[1].text
                 obj["description"] = content.find_all('div')[2].text
                 obj["href"] = result["href"]
+                obj["owner"] = result.find('span').text
 
-                add_news = f'INSERT INTO news VALUES ("{obj["title"]}", "{obj["href"]}", "{obj["description"]}", DEFAULT, DEFAULT);'
+                add_news = f'INSERT INTO news VALUES ("{obj["owner"]}","{obj["title"]}", "{obj["href"]}", "{obj["description"]}", DEFAULT, DEFAULT, DEFAULT);'
                 databaseConnection["cursor"].execute(add_news)
             except:
                 continue
